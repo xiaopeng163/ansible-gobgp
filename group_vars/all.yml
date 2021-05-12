@@ -1,0 +1,4 @@
+ansible_user: root
+ansible_connection: ssh
+
+gobgp_image_name: xiaopeng163/gobgp:latest

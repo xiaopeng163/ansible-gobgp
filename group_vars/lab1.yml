@@ -1,0 +1,24 @@
+gobgp_router_id: 10.10.10.10
+gobgp_api_host: 10.10.10.10
+
+gobgp_neighbors:
+  - name: sp1
+    peer_address: 10.10.10.1
+    peer_as: 702
+    local_as: 702
+    api_port: 50051
+    mrt_mib_file: /root/mrt/rib
+  - name: sp2
+    peer_address: 10.10.10.2
+    peer_as: 1234
+    local_as: 1234
+    api_port: 50052
+    mrt_mib_file: /root/mrt/rib
+  - name: sp3
+    peer_address: 10.10.10.3
+    peer_as: 1239
+    local_as: 1239
+    api_port: 50053
+    mrt_mib_file: /root/mrt/rib
+
+gobgp_cfg_dir: /root/lab1/

@@ -1,0 +1,36 @@
+- name: create a gobgp root directory if it does not exist
+  file:
+    path: "{{ gobgp_cfg_dir }}"
+    state: directory
+
+- name: create gobgp config file for each peer
+  template:
+    src: gobgpd.conf.j2
+    dest: "{{ gobgp_cfg_dir }}/{{ peer.name }}.conf"
+  with_items: "{{ gobgp_neighbors }}"
+  loop_control:
+    loop_var: peer
+  register: gobgp_cfg_result
+
+- name: copy docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ gobgp_cfg_dir }}/docker-compose.yml"
+  register: docker_compose_result
+
+- name: Remove containers for services not defined in the Compose file
+  shell: docker-compose up -d --remove-orphans # noqa 301 305
+  args:
+    chdir: "{{ gobgp_cfg_dir }}"
+  when: gobgp_cfg_result.changed or docker_compose_result.changed
+
+- name: Restart docker-compose
+  shell: docker-compose restart # noqa 301 305
+  args:
+    chdir: "{{ gobgp_cfg_dir }}"
+  when: gobgp_cfg_result.changed or docker_compose_result.changed
+
+- name: copy mrt inject shell script
+  template:
+    src: mrt_inject.sh
+    dest: "{{ gobgp_cfg_dir }}/mrt_inject.sh"

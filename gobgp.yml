@@ -1,0 +1,8 @@
+- name: ansible gobgp server
+  hosts: lab1
+  gather_facts: no
+  vars_files:
+    - group_vars/lab1.yml
+  tasks:
+    - include_role:
+        name: gobgp

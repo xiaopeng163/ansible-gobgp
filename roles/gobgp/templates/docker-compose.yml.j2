@@ -1,0 +1,15 @@
+version: "3.4"
+
+services:
+
+{% for peer in gobgp_neighbors %}
+  gobgp-{{ peer.name }}:
+    image: {{ gobgp_image_name }}
+    container_name: gobgp-{{ peer.name }}
+    hostname: gobgp-{{ peer.name }}
+    restart: unless-stopped
+    volumes:
+      - {{ gobgp_cfg_dir }}/{{ peer.name }}.conf:/etc/gobgpd.conf
+    network_mode: host
+    command: gobgpd -f /etc/gobgpd.conf --api-hosts={{ gobgp_router_id }}:{{ peer.api_port }}
+{% endfor %}

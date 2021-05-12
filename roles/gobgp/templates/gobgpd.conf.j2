@@ -1,0 +1,15 @@
+[global.config]
+  as = {{ peer.local_as }}
+  router-id = "{{ gobgp_router_id }}"
+  # listen port (by default 179)
+  # port = 1790
+  # to disable listening
+  port = -1
+
+[[neighbors]]
+  [neighbors.config]
+    neighbor-address = "{{ peer.peer_address }}"
+    peer-as = {{ peer.peer_as }}
+  [neighbors.route-reflector.config]
+    route-reflector-client = true
+    route-reflector-cluster-id = "{{ gobgp_router_id }}"
